@@ -14,29 +14,37 @@ export const handleUserResponse = ({ user }: { user: User }) => {
 };
 
 export const login = (data: { username: string; password: string }) => {
-  axios
-    .post("/api/vi/login", { data })
-    .then((response) => {
-      if (response.data) {
-        return handleUserResponse(response.data);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  return axios.post("/api/vi/login", { data }).then((response) => {
+    if (response.data) {
+      return handleUserResponse(response.data);
+    } else {
+      return Promise.reject(data);
+    }
+  });
 };
 
-export const register = (data: Partial<User>) => {
-  axios
-    .post("/api/vi/register", { data })
-    .then((response) => {
-      if (response.data) {
-        return handleUserResponse(response.data);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+export const register = (data: { username: string; password: string }) => {
+  return axios.post("/api/vi/register", { data }).then((response) => {
+    if (response.data) {
+      return handleUserResponse(response.data);
+    } else {
+      return Promise.reject(data);
+    }
+  });
 };
 
-export const logout = () => localStorage.removeItem(localStorageKey);
+export const logout = async () => localStorage.removeItem(localStorageKey);
+
+export const getUser = (token: string) => {
+  return axios
+    .get("api/v1/me", {
+      headers: {
+        Authorization: token,
+      },
+    })
+    .then((response) => {
+      if (response.data) {
+        return response.data;
+      }
+    });
+};
