@@ -1,38 +1,11 @@
-.App {
-  text-align: center;
+html {
+  /* rem：相对于根元素 html 的 font-size ，r 就是 root 的意思 */
+  /* 浏览器默认 html 的 font-size = 16px， 此处 62.5% * 16px = 10px */
+  /* 因此 1rem === 10px */
+  font-size: 62.5%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+html body #root .App {
+  /* vh: viewport height  1vh === 1%[视口高度] */
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
