@@ -13,6 +13,7 @@ function App() {
       {/* <AppProviders> */}
       {/* { user ? <AuthenticatedApp /> : <UnauthenticatedApp /> } */}
       <AuthenticatedApp />
+      {/* <UnauthenticatedApp /> */}
       {/* </AppProviders> */}
     </div>
   );

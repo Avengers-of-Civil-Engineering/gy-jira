@@ -14,7 +14,7 @@ export const SearchPanel = () => {
   // })
 
   return (
-    <Form>
+    <Form style={{ marginBottom: "2rem" }} layout={"inline"}>
       <Form.Item>
         <Input
           type="text"

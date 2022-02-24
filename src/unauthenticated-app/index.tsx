@@ -6,8 +6,11 @@ import { Register } from "./register";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
+import { useDocumentTitle } from "utils";
 
 export const UnauthenticatedApp = () => {
+  useDocumentTitle("请登陆注册以继续");
+
   const [isRegister, setIsRegister] = useState(false);
 
   const title = isRegister ? "请注册" : "请登陆";

@@ -4,6 +4,7 @@ import { Row } from "components/lib";
 import { ProjectListScreen } from "screens/project-list";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
+import { ProjectPopover } from "components/project-popover";
 
 export const AuthenticatedApp = () => {
   // const {logout} = useAuth()
@@ -23,8 +24,8 @@ const PageHeader = () => {
     <Header between={true}>
       <HeaderLeft gap={true}>
         <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
-        <h2>项目</h2>
-        <h2>用户</h2>
+        <ProjectPopover />
+        <span>用户</span>
       </HeaderLeft>
       <HeaderRight>
         <User />
