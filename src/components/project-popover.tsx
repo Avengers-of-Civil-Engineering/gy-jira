@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { Divider, Popover, Typography, List } from "antd";
 import { projects } from "screens/project-list/db";
+import { useProjectModal } from "screens/project-list/utils";
 import { ButtonNoPadding } from "./lib";
 
 export const ProjectPopover = () => {
+  const { open } = useProjectModal();
   const pinnedProjects = projects?.filter((project) => project.pin);
 
   const content = (
@@ -18,7 +20,7 @@ export const ProjectPopover = () => {
       </List>
       <Divider />
       {/* TODO: 完善 onClick 的逻辑 */}
-      <ButtonNoPadding type={"link"} onClick={() => console.log("创建项目")}>
+      <ButtonNoPadding type={"link"} onClick={open}>
         创建项目
       </ButtonNoPadding>
     </ContentContainer>

@@ -8,6 +8,7 @@ import { ProjectPopover } from "components/project-popover";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
+import { ProjectModal } from "screens/project-list/project-modal";
 
 export const AuthenticatedApp = () => {
   // const {logout} = useAuth()
@@ -27,6 +28,7 @@ export const AuthenticatedApp = () => {
             <Route index element={<ProjectListScreen />} />
           </Routes>
         </Main>
+        <ProjectModal />
       </Router>
     </Container>
   );
