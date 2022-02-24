@@ -1,18 +1,13 @@
 import { Form, Input, Select } from "antd";
-import { useState } from "react";
+import { User } from "types/user";
 
-export const SearchPanel = () => {
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
+interface SearchPanelProps {
+  users: User[];
+  param: { name: string; personId: number };
+  setParam: (param: SearchPanelProps["param"]) => void;
+}
 
-  // const [users, setUsers] = useState([])
-
-  // useEffect(() => {
-
-  // })
-
+export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
   return (
     <Form style={{ marginBottom: "2rem" }} layout={"inline"}>
       <Form.Item>
@@ -39,6 +34,11 @@ export const SearchPanel = () => {
           }
         >
           <Select.Option value="">负责人</Select.Option>
+          {users.map((user) => (
+            <Select.Option key={user.id} value={user.id}>
+              {user.name}
+            </Select.Option>
+          ))}
         </Select>
       </Form.Item>
     </Form>

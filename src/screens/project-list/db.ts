@@ -22,6 +22,7 @@ export const projects = [
     name: "骑手管理",
     personId: 1,
     organization: "外卖组",
+    pin: true,
     created: 1604989757139,
   },
   {
@@ -29,6 +30,7 @@ export const projects = [
     name: "团购 APP",
     personId: 2,
     organization: "团购组",
+    pin: true,
     created: 1604989757139,
   },
   {
@@ -36,6 +38,7 @@ export const projects = [
     name: "物料管理系统",
     personId: 2,
     organization: "物料组",
+    pin: false,
     created: 1546300800000,
   },
   {
@@ -43,6 +46,7 @@ export const projects = [
     name: "总部管理系统",
     personId: 3,
     organization: "总部",
+    pin: false,
     created: 1604980000011,
   },
   {
@@ -50,6 +54,7 @@ export const projects = [
     name: "送餐路线规划系统",
     personId: 4,
     organization: "外卖组",
+    pin: false,
     created: 1546900800000,
   },
 ];

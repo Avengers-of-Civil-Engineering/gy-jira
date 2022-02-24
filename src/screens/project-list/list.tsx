@@ -1,13 +1,31 @@
-import { Table } from "antd";
+import { Dropdown, Menu, Modal, Table, TableProps } from "antd";
+import { ButtonNoPadding } from "components/lib";
+import { Pin } from "components/pin";
 import dayjs from "dayjs";
-import { projects, users } from "./db";
+import { Project } from "types/project";
+import { User } from "types/user";
 
-export const List = () => {
+interface ListProps extends TableProps<Project> {
+  users: User[];
+}
+
+export const List = ({ users, ...props }: ListProps) => {
   return (
     <Table
       rowKey={"id"}
       pagination={false}
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          render(value, project) {
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckedChange={(pin) => console.log("pin", pin)}
+              />
+            );
+          },
+        },
         {
           title: "名称",
           dataIndex: "name",
@@ -39,8 +57,54 @@ export const List = () => {
             );
           },
         },
+        {
+          render(value, project) {
+            return <More project={project} />;
+          },
+        },
       ]}
-      dataSource={projects}
+      {...props}
     />
+  );
+};
+
+const More = ({ project }: { project: Project }) => {
+  const confirmDeleteProject = (id: number) => {
+    Modal.confirm({
+      title: "确定删除这个项目吗?",
+      content: "点击确定删除",
+      okText: "确定",
+      cancelText: "取消",
+      onOk() {
+        // deleteProject({ id });
+        console.log("toDeleteId", id);
+      },
+    });
+  };
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item key={"edit"}>
+            <ButtonNoPadding
+              type={"link"}
+              onClick={() => console.log("editingId", project.id)}
+            >
+              编辑
+            </ButtonNoPadding>
+          </Menu.Item>
+          <Menu.Item key={"delete"}>
+            <ButtonNoPadding
+              type={"link"}
+              onClick={() => confirmDeleteProject(project.id)}
+            >
+              删除
+            </ButtonNoPadding>
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+    </Dropdown>
   );
 };
