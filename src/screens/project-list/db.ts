@@ -58,3 +58,74 @@ export const projects = [
     created: 1546900800000,
   },
 ];
+
+export const kanbans = [
+  {
+    id: 1,
+    name: "待完成",
+    projectId: 1,
+  },
+  {
+    id: 2,
+    name: "未完成",
+    projectId: 1,
+  },
+  {
+    id: 3,
+    name: "开发中",
+    projectId: 1,
+  },
+];
+
+export const tasks = [
+  {
+    id: 1,
+    name: "登陆注册页面开发",
+    processorId: 1,
+    projectId: 1,
+    epicId: 1,
+    kanbanId: 1,
+    typeId: 1,
+    note: "",
+  },
+  {
+    id: 2,
+    name: "单元测试",
+    processorId: 1,
+    projectId: 1,
+    epicId: 1,
+    kanbanId: 1,
+    typeId: 1,
+    note: "",
+  },
+  {
+    id: 3,
+    name: "管理登陆界面开发",
+    processorId: 1,
+    projectId: 1,
+    epicId: 1,
+    kanbanId: 2,
+    typeId: 1,
+    note: "",
+  },
+  {
+    id: 4,
+    name: "性能优化",
+    processorId: 1,
+    projectId: 1,
+    epicId: 1,
+    kanbanId: 2,
+    typeId: 1,
+    note: "",
+  },
+  {
+    id: 5,
+    name: "自测",
+    processorId: 1,
+    projectId: 1,
+    epicId: 1,
+    kanbanId: 3,
+    typeId: 1,
+    note: "",
+  },
+];

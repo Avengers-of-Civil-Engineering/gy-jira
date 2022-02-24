@@ -2,6 +2,7 @@ import { Dropdown, Menu, Modal, Table, TableProps } from "antd";
 import { ButtonNoPadding } from "components/lib";
 import { Pin } from "components/pin";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 import { Project } from "types/project";
 import { User } from "types/user";
 
@@ -28,7 +29,9 @@ export const List = ({ users, ...props }: ListProps) => {
         },
         {
           title: "名称",
-          dataIndex: "name",
+          render(value, project) {
+            return <Link to={`/projects/${project.id}`}>{project.name}</Link>;
+          },
         },
         {
           title: "部门",

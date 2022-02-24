@@ -1,20 +1,33 @@
 // import { useAuth } from "context/auth-context"
 import styled from "@emotion/styled";
-import { Row } from "components/lib";
+import { ButtonNoPadding, Row } from "components/lib";
 import { ProjectListScreen } from "screens/project-list";
 import { ReactComponent as SoftwareLogo } from "assets/software-logo.svg";
 import { Button, Dropdown, Menu } from "antd";
 import { ProjectPopover } from "components/project-popover";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ProjectScreen } from "screens/project";
+import { resetRoute } from "utils";
 
 export const AuthenticatedApp = () => {
   // const {logout} = useAuth()
 
   return (
     <Container>
-      <PageHeader />
-      <Main>
-        <ProjectListScreen />
-      </Main>
+      <Router>
+        <PageHeader />
+        <Main>
+          <Routes>
+            <Route path={"/projects"} element={<ProjectListScreen />} />
+            <Route
+              path={"/projects/:projectId/*"}
+              element={<ProjectScreen />}
+            />
+            {/* 默认路由 */}
+            <Route index element={<ProjectListScreen />} />
+          </Routes>
+        </Main>
+      </Router>
     </Container>
   );
 };
@@ -23,7 +36,9 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
+        <ButtonNoPadding type={"link"} onClick={resetRoute}>
+          <SoftwareLogo width={"18rem"} color={"rgb(38, 132, 255)"} />
+        </ButtonNoPadding>
         <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
@@ -53,7 +68,7 @@ const User = () => {
 const Container = styled.div`
   display: grid;
   grid-template-rows: 6rem 1fr;
-  height: 100%;
+  height: 100vh;
 `;
 
 const Header = styled(Row)`
