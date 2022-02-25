@@ -14,7 +14,7 @@ export const ProjectListScreen = () => {
   useDocumentTitle("项目列表", false);
 
   const [param, setParam] = useState({
-    name: "",
+    username: "",
     personId: 0,
   });
 

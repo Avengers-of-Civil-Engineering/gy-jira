@@ -1,20 +1,19 @@
-import { AuthenticatedApp } from "authenticated-app";
-// import { AppProviders } from "context";
-// import { useAuth } from "context/auth-context";
 import React from "react";
-// import { UnauthenticatedApp } from "unauthenticated-app";
 import "./App.css";
+import { UnauthenticatedApp } from "unauthenticated-app";
+import { AuthenticatedApp } from "authenticated-app";
+import { useAuth } from "context/auth-context";
+import { getToken } from "auth-provider";
 
 function App() {
-  // const { user } = useAuth()
+  const token = getToken();
+  const { user } = useAuth();
 
   return (
     <div className="App">
-      {/* <AppProviders> */}
-      {/* { user ? <AuthenticatedApp /> : <UnauthenticatedApp /> } */}
-      <AuthenticatedApp />
+      {user && token ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      {/* <AuthenticatedApp /> */}
       {/* <UnauthenticatedApp /> */}
-      {/* </AppProviders> */}
     </div>
   );
 }

@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import { Button, Card, Divider } from "antd";
-import { useState } from "react";
 import { Login } from "./login";
 import { Register } from "./register";
 import logo from "assets/logo.svg";
 import left from "assets/left.svg";
 import right from "assets/right.svg";
 import { useDocumentTitle } from "utils";
+import { useState } from "react";
 
 export const UnauthenticatedApp = () => {
   useDocumentTitle("请登陆注册以继续");
@@ -21,7 +21,11 @@ export const UnauthenticatedApp = () => {
       <Background />
       <ShadowCard>
         <Title>{title}</Title>
-        {isRegister ? <Register /> : <Login />}
+        {isRegister ? (
+          <Register onSuccess={(value) => setIsRegister(value)} />
+        ) : (
+          <Login />
+        )}
         <Divider />
         <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>
           {isRegister ? "已经有账号了？直接登录" : "没有账号？注册新账号"}
@@ -48,7 +52,7 @@ const ShadowCard = styled(Card)`
   text-align: center;
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   margin-bottom: 2.4rem;
   color: rgb(94, 108, 132);
 `;

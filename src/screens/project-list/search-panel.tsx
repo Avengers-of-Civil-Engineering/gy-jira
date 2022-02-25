@@ -3,7 +3,7 @@ import { User } from "types/user";
 
 interface SearchPanelProps {
   users: User[];
-  param: { name: string; personId: number };
+  param: { username: string; personId: number };
   setParam: (param: SearchPanelProps["param"]) => void;
 }
 
@@ -14,11 +14,11 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
         <Input
           type="text"
           placeholder={"项目名"}
-          value={param.name}
+          value={param.username}
           onChange={(evt) =>
             setParam({
               ...param,
-              name: evt.target.value,
+              username: evt.target.value,
             })
           }
         />
@@ -36,7 +36,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
           <Select.Option value="">负责人</Select.Option>
           {users.map((user) => (
             <Select.Option key={user.id} value={user.id}>
-              {user.name}
+              {user.username}
             </Select.Option>
           ))}
         </Select>

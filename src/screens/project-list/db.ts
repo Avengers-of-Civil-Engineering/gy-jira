@@ -1,19 +1,19 @@
 export const users = [
   {
     id: 1,
-    name: "高修文",
+    username: "高修文",
   },
   {
     id: 2,
-    name: "熊天成",
+    username: "熊天成",
   },
   {
     id: 3,
-    name: "郑华",
+    username: "郑华",
   },
   {
     id: 4,
-    name: "王文静",
+    username: "王文静",
   },
 ];
 export const projects = [
