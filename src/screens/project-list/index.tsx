@@ -1,36 +1,22 @@
 import { Button } from "antd";
 import { Row, ScreenContainer } from "components/lib";
-import { useEffect, useState } from "react";
-import { Project } from "types/project";
 import { useDocumentTitle } from "utils";
-import { projects, users } from "./db";
+import { useProjects } from "utils/project";
+import { useUsers } from "utils/user";
 import { List } from "./list";
 import { SearchPanel } from "./search-panel";
-import { useProjectModal } from "./utils";
+import { useProjectModal, useProjectSearchParams } from "./utils";
 
 export const ProjectListScreen = () => {
+  useDocumentTitle("项目列表", false);
   const { open } = useProjectModal();
 
-  useDocumentTitle("项目列表", false);
+  const [param, setParam] = useProjectSearchParams();
 
-  const [param, setParam] = useState({
-    username: "",
-    personId: 0,
-  });
-
-  const [list, setList] = useState<Project[]>([]);
-
-  // TODO: 修改 -> 根据 params 请求后端 projects 数据，然后 setList
-  useEffect(() => {
-    const newList = projects.filter(
-      (project) => project.personId === param.personId
-    );
-    if (!newList.length) {
-      setList(projects);
-    } else {
-      setList(newList);
-    }
-  }, [param]);
+  const { data: list, isLoading } = useProjects(param);
+  const { data: users } = useUsers();
+  // console.log('users', users)
+  // console.log('projects', list)
 
   return (
     <ScreenContainer>
@@ -40,8 +26,8 @@ export const ProjectListScreen = () => {
           创建项目
         </Button>
       </Row>
-      <SearchPanel users={users} param={param} setParam={setParam} />
-      <List users={users} dataSource={list || []} />
+      <SearchPanel param={param} setParam={setParam} />
+      <List loading={isLoading} users={users || []} dataSource={list || []} />
     </ScreenContainer>
   );
 };
