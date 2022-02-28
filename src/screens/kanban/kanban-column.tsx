@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import { Button, Card, Dropdown, Menu, Modal } from "antd";
 import { Row } from "components/lib";
+import { Mark } from "components/Mark";
 import { Kanban } from "types/kanban";
+import { Task } from "types/task";
 import { useDeleteKanban } from "utils/kanban";
 import { useTasks } from "utils/task";
 import { CreateTask } from "./create-task";
@@ -10,7 +12,6 @@ import { useTasksSearchParams } from "./utils";
 export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
   const { data: allTasks } = useTasks(useTasksSearchParams());
   const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
-  console.log("tasks", tasks);
 
   return (
     <Container>
@@ -20,13 +21,7 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
       </Row>
       <TasksContainer>
         {tasks?.map((task) => (
-          <Card style={{ marginBottom: "0.5rem" }} key={task.id}>
-            <p>{task.name}</p>
-            <img
-              src={task?.typeId === 1 ? "/task.svg" : "/bug.svg"}
-              alt={"task-icon"}
-            />
-          </Card>
+          <TaskCard task={task} key={task.id} />
         ))}
         <CreateTask kanbanId={kanban.id} />
       </TasksContainer>
@@ -60,6 +55,22 @@ const More = ({ kanban }: { kanban: Kanban }) => {
     <Dropdown overlay={overlay}>
       <Button type={"link"}>...</Button>
     </Dropdown>
+  );
+};
+
+const TaskCard = ({ task }: { task: Task }) => {
+  const { name: keyword } = useTasksSearchParams();
+
+  return (
+    <Card style={{ marginBottom: "0.5rem" }} key={task.id}>
+      <p>
+        <Mark name={task?.name} keyword={keyword} />
+      </p>
+      <img
+        src={task?.typeId === 1 ? "/task.svg" : "/bug.svg"}
+        alt={"task-icon"}
+      />
+    </Card>
   );
 };
 

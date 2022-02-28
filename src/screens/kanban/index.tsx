@@ -5,6 +5,7 @@ import { useDocumentTitle } from "utils";
 import { useKanbans } from "utils/kanban";
 import { CreateKanban } from "./create-kanban";
 import { KanbanColumn } from "./kanban-column";
+import { TaskSearchPanel } from "./task-search-panel";
 import { useProjectInUrl } from "./utils";
 
 export const KanbanScreen = () => {
@@ -16,6 +17,7 @@ export const KanbanScreen = () => {
   return (
     <ScreenContainer>
       <h1>{`${currentProject?.name}看板`}</h1>
+      <TaskSearchPanel />
       {isLoading ? (
         <Spin size={"large"} />
       ) : (

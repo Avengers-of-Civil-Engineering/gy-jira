@@ -1,5 +1,7 @@
+import { useMemo } from "react";
 import { useLocation } from "react-router";
 import { useProject } from "utils/project";
+import { useUrlQueryParam } from "utils/url";
 
 // 从 url 中获取 projectId
 export const useProjectIdInUrl = () => {
@@ -17,4 +19,18 @@ export const useKanbansSearchParams = () => ({
 });
 
 // tasks 的查询参数
-export const useTasksSearchParams = () => ({ projectId: useProjectIdInUrl() });
+export const useTasksSearchParams = () => {
+  const [param] = useUrlQueryParam(["name", "processorId", "typeId", "tagId"]);
+  const projectId = useProjectIdInUrl();
+
+  return useMemo(
+    () => ({
+      projectId,
+      name: param?.name,
+      processorId: Number(param?.processorId) || undefined,
+      typeId: Number(param?.typeId) || undefined,
+      tagId: Number(param?.tagId) || undefined,
+    }),
+    [param, projectId]
+  );
+};
