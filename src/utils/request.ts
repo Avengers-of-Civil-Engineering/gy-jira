@@ -28,8 +28,7 @@ export const post = (url: string, data?: any) => {
   const token = getToken();
   const AUTH_TOKEN = `Token ${token}`;
   return axios
-    .post(url, {
-      data,
+    .post(url, data, {
       headers: {
         Authorization: AUTH_TOKEN,
       },
@@ -49,8 +48,7 @@ export const patch = (url: string, data?: any) => {
   const token = getToken();
   const AUTH_TOKEN = `Token ${token}`;
   return axios
-    .patch(url, {
-      data,
+    .patch(url, data, {
       headers: {
         Authorization: AUTH_TOKEN,
       },

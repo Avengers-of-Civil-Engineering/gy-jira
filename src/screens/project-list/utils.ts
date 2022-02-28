@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { useUrlQueryParam } from "utils/url";
+import { useProject } from "utils/project";
+import { useSetUrlSearchParam, useUrlQueryParam } from "utils/url";
 
 // 项目列表搜索参数： 项目名 name 和 负责人 personId
 export const useProjectSearchParams = () => {
@@ -20,12 +21,28 @@ export const useProjectModal = () => {
     "projectCreate",
   ]);
 
+  const [{ editingProjectId }, setEditingProjectId] = useUrlQueryParam([
+    "editingProjectId",
+  ]);
+
+  const { data: editingProject, isLoading } = useProject(
+    Number(editingProjectId)
+  );
+
+  const setSearchParams = useSetUrlSearchParam();
+
   const open = () => setProjectCreate({ projectCreate: true });
-  const close = () => setProjectCreate({ projectCreate: "" });
+  const close = () =>
+    setSearchParams({ projectCreate: "", editingProjectId: "" });
+  const startEdit = (id: number) =>
+    setEditingProjectId({ editingProjectId: id });
 
   return {
-    projectModalOpen: projectCreate === "true",
+    projectModalOpen: projectCreate === "true" || Boolean(editingProjectId),
     open,
     close,
+    startEdit,
+    editingProject,
+    isLoading,
   };
 };

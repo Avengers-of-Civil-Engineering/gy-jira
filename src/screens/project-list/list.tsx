@@ -5,24 +5,30 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Project } from "types/project";
 import { User } from "types/user";
+import { useDeleteProject, useProjectPin } from "utils/project";
+import { useProjectModal } from "./utils";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
 }
 
 export const List = ({ users, ...props }: ListProps) => {
+  const { mutate } = useProjectPin();
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+
   return (
     <Table
       rowKey={"id"}
       pagination={false}
       columns={[
         {
+          // 项目收藏状态
           title: <Pin checked={true} disabled={true} />,
           render(value, project) {
             return (
               <Pin
                 checked={project.pin}
-                onCheckedChange={(pin) => console.log("pin", pin)}
+                onCheckedChange={pinProject(project.id)}
               />
             );
           },
@@ -72,6 +78,10 @@ export const List = ({ users, ...props }: ListProps) => {
 };
 
 const More = ({ project }: { project: Project }) => {
+  const { startEdit } = useProjectModal();
+
+  const { mutate: deleteProject } = useDeleteProject();
+
   const confirmDeleteProject = (id: number) => {
     Modal.confirm({
       title: "确定删除这个项目吗?",
@@ -79,8 +89,8 @@ const More = ({ project }: { project: Project }) => {
       okText: "确定",
       cancelText: "取消",
       onOk() {
-        // deleteProject({ id });
-        console.log("toDeleteId", id);
+        deleteProject({ id });
+        // console.log("toDeleteId", id);
       },
     });
   };
@@ -91,7 +101,7 @@ const More = ({ project }: { project: Project }) => {
           <Menu.Item key={"edit"}>
             <ButtonNoPadding
               type={"link"}
-              onClick={() => console.log("editingId", project.id)}
+              onClick={() => startEdit(project.id)}
             >
               编辑
             </ButtonNoPadding>
