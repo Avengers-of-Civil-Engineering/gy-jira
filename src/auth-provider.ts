@@ -20,7 +20,7 @@ export const login = (data: { username: string; password: string }) => {
     .post("/api/v1/api-token-auth/", data)
     .then((response) => {
       if (response.data) {
-        console.log("login-res", response);
+        // console.log("login-res", response);
         localStorage.setItem(localStorageKey, response.data?.token || "");
         return Promise.resolve(response.data);
       } else {
@@ -50,7 +50,7 @@ export const register = (data: RegisterForm) => {
     .post("/api/v1/users/", data)
     .then((response) => {
       if (response.data) {
-        console.log("register-res", response);
+        // console.log("register-res", response);
         return Promise.resolve(response.data);
       } else {
         return Promise.reject(data);
@@ -87,7 +87,7 @@ export const getUser = (token: string) => {
     })
     .then((response) => {
       if (response.data) {
-        console.log("me-res", response);
+        // console.log("me-res", response);
         return response.data;
       }
     });

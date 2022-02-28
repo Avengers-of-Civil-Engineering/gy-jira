@@ -16,9 +16,6 @@ export const Login = () => {
 
   return (
     <div>
-      {/* <span>
-        {user ? `hello ${user.name}` : null}
-      </span> */}
       <Form onFinish={handleLogin}>
         <Form.Item
           name={"username"}

@@ -16,7 +16,7 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [searchParams]
     ),
-    (param: { [key in K]: unknown }) => {
+    (param: Partial<{ [key in K]: unknown }>) => {
       return setSearchParams(param);
     },
   ] as const;

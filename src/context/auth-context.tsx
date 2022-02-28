@@ -7,10 +7,10 @@ import { AuthForm, RegisterForm } from "types/auth";
 const bootstrapUser = async () => {
   let user = null;
   const token = auth.getToken();
-  console.log("token-get", token);
+  // console.log("token-get", token);
   if (token) {
     const data = await auth.getUser(token);
-    console.log("data-get", data);
+    // console.log("data-get", data);
     user = data;
   }
   return user;

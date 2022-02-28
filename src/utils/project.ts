@@ -1,10 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Project } from "types/project";
+import { useDebounce } from "utils";
 import { get, patch } from "./request";
 
 export const useProjects = (params?: Partial<Project>) => {
-  return useQuery<Project[], Error>(["projects", params], () =>
-    get("/api/v1/projects/", params)
+  const debouncedParam = { ...params, name: useDebounce(params?.name, 200) };
+
+  return useQuery<Project[], Error>(["projects", debouncedParam], () =>
+    get("/api/v1/projects/", debouncedParam)
   );
 };
 

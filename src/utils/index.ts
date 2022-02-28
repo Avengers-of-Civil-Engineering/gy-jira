@@ -19,7 +19,7 @@ export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
 export const resetRoute = () => (window.location.href = window.location.origin);
 
 export const isVoid = (value: unknown) =>
-  value === undefined || value === null || value === "";
+  value === undefined || value === null || value === "" || value === 0;
 
 // 清除搜索参数的无效值
 export const cleanObject = (obj: { [key: string]: unknown }) => {

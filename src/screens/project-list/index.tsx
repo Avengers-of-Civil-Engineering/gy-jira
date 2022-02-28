@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import { Row, ScreenContainer } from "components/lib";
-import { useDebounce, useDocumentTitle } from "utils";
+import { useDocumentTitle } from "utils";
 import { useProjects } from "utils/project";
 import { useUsers } from "utils/user";
 import { List } from "./list";
@@ -14,10 +14,8 @@ export const ProjectListScreen = () => {
 
   const [param, setParam] = useProjectSearchParams();
 
-  const { data: list, isLoading } = useProjects(useDebounce(param, 200));
+  const { data: list, isLoading } = useProjects(param);
   const { data: users } = useUsers();
-  // console.log('users', users)
-  // console.log('projects', list)
 
   return (
     <ScreenContainer>
