@@ -5,6 +5,7 @@ import { useDocumentTitle } from "utils";
 import { useKanbans } from "utils/kanban";
 import { CreateKanban } from "./create-kanban";
 import { KanbanColumn } from "./kanban-column";
+import { TaskModal } from "./task-modal";
 import { TaskSearchPanel } from "./task-search-panel";
 import { useProjectInUrl } from "./utils";
 
@@ -28,6 +29,7 @@ export const KanbanScreen = () => {
           <CreateKanban />
         </ColumnsContainer>
       )}
+      <TaskModal />
     </ScreenContainer>
   );
 };

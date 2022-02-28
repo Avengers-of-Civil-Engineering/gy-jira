@@ -7,7 +7,7 @@ import { Task } from "types/task";
 import { useDeleteKanban } from "utils/kanban";
 import { useTasks } from "utils/task";
 import { CreateTask } from "./create-task";
-import { useTasksSearchParams } from "./utils";
+import { useTaskModal, useTasksSearchParams } from "./utils";
 
 export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
   const { data: allTasks } = useTasks(useTasksSearchParams());
@@ -59,10 +59,15 @@ const More = ({ kanban }: { kanban: Kanban }) => {
 };
 
 const TaskCard = ({ task }: { task: Task }) => {
+  const { startEdit } = useTaskModal();
   const { name: keyword } = useTasksSearchParams();
 
   return (
-    <Card style={{ marginBottom: "0.5rem" }} key={task.id}>
+    <Card
+      onClick={() => startEdit(task.id)}
+      style={{ marginBottom: "0.5rem", cursor: "pointer" }}
+      key={task.id}
+    >
       <p>
         <Mark name={task?.name} keyword={keyword} />
       </p>

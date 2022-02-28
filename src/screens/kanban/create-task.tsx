@@ -31,6 +31,7 @@ export const CreateTask = ({ kanbanId }: { kanbanId: number }) => {
   return (
     <Card>
       <Input
+        autoFocus={true}
         onBlur={toggle}
         placeholder={"请输入任务名"}
         onPressEnter={submit}
