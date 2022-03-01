@@ -4,8 +4,10 @@ import { RegisterForm } from "types/auth";
 
 export const Register = ({
   onSuccess,
+  onError,
 }: {
   onSuccess: (value: boolean) => void;
+  onError: (error: Error | null) => void;
 }) => {
   const { register } = useAuth();
 
@@ -15,11 +17,19 @@ export const Register = ({
       try {
         await register(value);
         onSuccess(false);
-      } catch (error) {
+        onError(null);
+      } catch (error: any) {
         console.log(error);
+        const errorData = { name: "register", message: "注册失败" };
+        errorData.message =
+          error?.msg || `用户名：${error?.username}` || error?.non_field_errors;
+        if (error) {
+          onError(errorData);
+        }
       }
     } else {
       console.log("密码不一致");
+      onError({ name: "register", message: "密码不一致" });
     }
   };
 

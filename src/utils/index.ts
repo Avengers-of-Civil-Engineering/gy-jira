@@ -46,3 +46,17 @@ export const useDebounce = <T>(value: T, delay: number) => {
 
   return debounceValue;
 };
+
+// 组件挂载状态
+export const useMountedRef = () => {
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  });
+
+  return mountedRef;
+};

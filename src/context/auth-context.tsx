@@ -1,7 +1,10 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect } from "react";
 import * as auth from "auth-provider";
 import { User } from "types/user";
 import { AuthForm, RegisterForm } from "types/auth";
+import { useAsync } from "utils/use-async";
+import { useQueryClient } from "react-query";
+import { FullPageErrorFallback, FullPageLoading } from "components/lib";
 
 // 初始化用户信息
 const bootstrapUser = async () => {
@@ -29,15 +32,41 @@ const AuthContext = React.createContext<
 AuthContext.displayName = "AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
+  const {
+    data: user,
+    setData: setUser,
+    run,
+    isIdle,
+    isLoading,
+    isError,
+    error,
+  } = useAsync<User | null>();
+
+  const queryClient = useQueryClient();
 
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: RegisterForm) => auth.register(form).then(setUser);
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () =>
+    auth.logout().then(() => {
+      setUser(null);
+      // 登出时，清除用户信息
+      queryClient.clear();
+    });
 
+  // 刷新时，初始化用户信息
   useEffect(() => {
-    bootstrapUser().then(setUser);
+    run(bootstrapUser());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (isIdle || isLoading) {
+    return <FullPageLoading />;
+  }
+
+  if (isError) {
+    return <FullPageErrorFallback error={error} />;
+  }
 
   return (
     <AuthContext.Provider

@@ -7,11 +7,13 @@ import left from "assets/left.svg";
 import right from "assets/right.svg";
 import { useDocumentTitle } from "utils";
 import { useState } from "react";
+import { ErrorBox } from "components/lib";
 
 export const UnauthenticatedApp = () => {
   useDocumentTitle("请登陆注册以继续");
 
   const [isRegister, setIsRegister] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const title = isRegister ? "请注册" : "请登陆";
 
@@ -21,10 +23,11 @@ export const UnauthenticatedApp = () => {
       <Background />
       <ShadowCard>
         <Title>{title}</Title>
+        {error ? <ErrorBox error={error} /> : null}
         {isRegister ? (
-          <Register onSuccess={(value) => setIsRegister(value)} />
+          <Register onSuccess={setIsRegister} onError={setError} />
         ) : (
-          <Login />
+          <Login onError={setError} />
         )}
         <Divider />
         <Button type={"link"} onClick={() => setIsRegister(!isRegister)}>

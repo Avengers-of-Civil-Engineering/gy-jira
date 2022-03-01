@@ -2,15 +2,28 @@ import { Button, Form, Input } from "antd";
 import { useAuth } from "context/auth-context";
 import { AuthForm } from "types/auth";
 
-export const Login = () => {
+export const Login = ({
+  onError,
+}: {
+  onError: (error: Error | null) => void;
+}) => {
   const { login } = useAuth();
 
   const handleLogin = async (value: AuthForm) => {
     console.log("auth-value", value);
     try {
       await login(value);
-    } catch (error) {
+      onError(null);
+    } catch (error: any) {
       console.log(error);
+      const errorData = {
+        name: "login",
+        message: "登陆失败, 用户名或密码错误",
+      };
+      errorData.message = error?.username || error?.non_field_errors;
+      if (error) {
+        onError(errorData);
+      }
     }
   };
 

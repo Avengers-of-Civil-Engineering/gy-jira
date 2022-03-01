@@ -7,13 +7,14 @@ import { getToken } from "auth-provider";
 
 function App() {
   const token = getToken();
+  console.log("token", token);
   const { user } = useAuth();
+  console.log("user", user);
 
   return (
     <div className="App">
-      {user && token ? <AuthenticatedApp /> : <UnauthenticatedApp />}
-      {/* <AuthenticatedApp /> */}
-      {/* <UnauthenticatedApp /> */}
+      {/* {token && user ? <AuthenticatedApp /> : <UnauthenticatedApp />} */}
+      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </div>
   );
 }

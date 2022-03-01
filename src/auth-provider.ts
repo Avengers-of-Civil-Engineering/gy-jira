@@ -22,7 +22,7 @@ export const login = (data: { username: string; password: string }) => {
       if (response.data) {
         // console.log("login-res", response);
         localStorage.setItem(localStorageKey, response.data?.token || "");
-        return Promise.resolve(response.data);
+        return Promise.resolve(response.data?.user);
       } else {
         return Promise.reject(data);
       }
@@ -51,7 +51,7 @@ export const register = (data: RegisterForm) => {
     .then((response) => {
       if (response.data) {
         // console.log("register-res", response);
-        return Promise.resolve(response.data);
+        return Promise.resolve(response.data?.user);
       } else {
         return Promise.reject(data);
       }

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button } from "antd";
+import { Button, Spin, Typography } from "antd";
 
 export const Row = styled.div<{
   gap?: number | boolean;
@@ -34,3 +34,36 @@ export const ScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const FullPage = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const FullPageLoading = () => {
+  return (
+    <FullPage>
+      <Spin size={"large"} />
+    </FullPage>
+  );
+};
+
+export const FullPageErrorFallback = ({ error }: { error: Error | null }) => {
+  return (
+    <FullPage>
+      <ErrorBox error={error} />
+    </FullPage>
+  );
+};
+
+// 类型守卫
+const isError = (value: any): value is Error => value?.message;
+
+export const ErrorBox = ({ error }: { error: unknown }) => {
+  if (isError(error)) {
+    return <Typography.Text type={"danger"}>{error?.message}</Typography.Text>;
+  }
+  return null;
+};

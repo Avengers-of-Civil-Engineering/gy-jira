@@ -58,7 +58,9 @@ const User = () => {
         </Menu>
       }
     >
-      <Button type={"link"}>{`hi, ${user?.username}`}</Button>
+      <Button type={"link"} onClick={(e) => e.preventDefault()}>
+        Hi, {user?.username}
+      </Button>
     </Dropdown>
   );
 };
