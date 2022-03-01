@@ -1,4 +1,5 @@
 import { Modal, Form, Input, Button } from "antd";
+import { EpicSelect } from "components/epic-select";
 import { TaskTypeSelect } from "components/task-type-select";
 import { UserSelect } from "components/user-select";
 import { useEffect } from "react";
@@ -66,6 +67,9 @@ export const TaskModal = () => {
         </Form.Item>
         <Form.Item label={"类型"} name={"typeId"}>
           <TaskTypeSelect />
+        </Form.Item>
+        <Form.Item label={"任务组"} name={"epicId"}>
+          <EpicSelect defaultOptionName={"任务组"} />
         </Form.Item>
       </Form>
       <div style={{ textAlign: "right" }}>
