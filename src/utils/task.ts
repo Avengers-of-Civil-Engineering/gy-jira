@@ -1,6 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { Task } from "types/task";
 import { useDebounce } from "utils";
+import { useDeleteConfig, useEditConfig } from "./optimistic-options";
 import { deleter, get, patch, post } from "./request";
 
 // 根据参数 params 获取‘任务列表’
@@ -33,25 +34,17 @@ export const useAddTask = () => {
 };
 
 // 删除单个 task
-export const useDeleteTask = () => {
-  const queryClient = useQueryClient();
-
+export const useDeleteTask = (queryKey: QueryKey) => {
   return useMutation(
     ({ id }: { id: number }) => deleter(`/api/v1/tasks/${id}`),
-    {
-      onSuccess: () => queryClient.invalidateQueries("tasks"),
-    }
+    useDeleteConfig(queryKey)
   );
 };
 
 // 编辑单个 task
-export const useEditTask = () => {
-  const queryClient = useQueryClient();
-
+export const useEditTask = (queryKey: QueryKey) => {
   return useMutation(
     (data: Partial<Task>) => patch(`/api/v1/tasks/${data.id}`, data),
-    {
-      onSuccess: () => queryClient.invalidateQueries("tasks"),
-    }
+    useEditConfig(queryKey)
   );
 };

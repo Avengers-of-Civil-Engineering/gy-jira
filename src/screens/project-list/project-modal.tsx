@@ -4,7 +4,7 @@ import { Form } from "antd";
 import { UserSelect } from "components/user-select";
 import { useEffect } from "react";
 import { useAddProject, useEditProject } from "utils/project";
-import { useProjectModal } from "./utils";
+import { useProjectModal, useProjectsQueryKey } from "./utils";
 
 export const ProjectModal = () => {
   const { projectModalOpen, close, editingProject, isLoading } =
@@ -12,7 +12,9 @@ export const ProjectModal = () => {
 
   const useMutateProject = editingProject ? useEditProject : useAddProject;
 
-  const { mutateAsync, isLoading: mutateLoading } = useMutateProject();
+  const { mutateAsync, isLoading: mutateLoading } = useMutateProject(
+    useProjectsQueryKey()
+  );
 
   const title = editingProject ? "编辑项目" : "创建项目";
 

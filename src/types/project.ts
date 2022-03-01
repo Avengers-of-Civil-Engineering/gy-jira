@@ -5,5 +5,6 @@ export interface Project {
   // pin: 是否收藏
   pin: boolean;
   organization: string;
-  created: number;
+  createAt: number;
+  updateAt: number;
 }

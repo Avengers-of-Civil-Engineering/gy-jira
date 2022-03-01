@@ -9,7 +9,7 @@ import { useDocumentTitle } from "utils";
 import { useDeleteEpic, useEpics } from "utils/epic";
 import { useTasks } from "utils/task";
 import { EpicModal } from "./epic-modal";
-import { useEpicModal, useEpicsSearchParams } from "./utils";
+import { useEpicModal, useEpicsQueryKey, useEpicsSearchParams } from "./utils";
 
 export const EpicScreen = () => {
   useDocumentTitle("任务组列表");
@@ -81,7 +81,9 @@ export const EpicScreen = () => {
 const More = ({ epic }: { epic: Epic }) => {
   const { startEdit } = useEpicModal();
 
-  const { mutateAsync: deleteEpic, isLoading: deleteLoading } = useDeleteEpic();
+  const { mutateAsync: deleteEpic, isLoading: deleteLoading } = useDeleteEpic(
+    useEpicsQueryKey()
+  );
 
   const confirmDeleteEpic = (epic: Epic) => {
     Modal.confirm({

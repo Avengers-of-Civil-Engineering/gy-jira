@@ -7,7 +7,7 @@ import { Task } from "types/task";
 import { useDeleteKanban } from "utils/kanban";
 import { useTasks } from "utils/task";
 import { CreateTask } from "./create-task";
-import { useTaskModal, useTasksSearchParams } from "./utils";
+import { useKanbanQueryKey, useTaskModal, useTasksSearchParams } from "./utils";
 
 export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
   const { data: allTasks } = useTasks(useTasksSearchParams());
@@ -30,7 +30,7 @@ export const KanbanColumn = ({ kanban }: { kanban: Kanban }) => {
 };
 
 const More = ({ kanban }: { kanban: Kanban }) => {
-  const { mutateAsync } = useDeleteKanban();
+  const { mutateAsync } = useDeleteKanban(useKanbanQueryKey());
 
   const deleteKanban = async () => {
     Modal.confirm({

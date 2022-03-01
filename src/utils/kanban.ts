@@ -1,5 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { Kanban } from "types/kanban";
+import { useDeleteConfig } from "./optimistic-options";
 import { deleter, get, post } from "./request";
 
 // 根据参数 params 获取‘看板列表’
@@ -22,13 +23,9 @@ export const useAddKanban = () => {
 };
 
 // 删除单个看板
-export const useDeleteKanban = () => {
-  const queryClient = useQueryClient();
-
+export const useDeleteKanban = (queryKey: QueryKey) => {
   return useMutation(
     ({ id }: { id: number }) => deleter(`/api/v1/kanbans/${id}`),
-    {
-      onSuccess: () => queryClient.invalidateQueries("kanbans"),
-    }
+    useDeleteConfig(queryKey)
   );
 };

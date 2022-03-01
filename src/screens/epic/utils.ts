@@ -7,6 +7,8 @@ export const useEpicsSearchParams = () => ({
   projectId: useProjectIdInUrl(),
 });
 
+export const useEpicsQueryKey = () => ["epics", useEpicsSearchParams()];
+
 // 处理 创建/编辑 epic 的逻辑
 export const useEpicModal = () => {
   const [{ createEpic }, setCreateEpic] = useUrlQueryParam(["createEpic"]);

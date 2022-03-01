@@ -18,7 +18,6 @@ export const CreateKanban = () => {
   return (
     <Container>
       <Input
-        autoFocus={true}
         size={"large"}
         placeholder={"新建看板名称"}
         onPressEnter={submit}

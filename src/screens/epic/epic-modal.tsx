@@ -6,14 +6,16 @@ import { useProjectIdInUrl } from "screens/kanban/utils";
 import { useAddEpic, useEditEpic } from "utils/epic";
 import "moment/locale/zh-cn";
 import locale from "antd/es/date-picker/locale/zh_CN";
-import { useEpicModal } from "./utils";
+import { useEpicModal, useEpicsQueryKey } from "./utils";
 
 export const EpicModal = () => {
   const { isEpicModalOpen, editingEpic, isLoading, close } = useEpicModal();
   const projectId = useProjectIdInUrl();
 
   const useMutateEpic = editingEpic ? useEditEpic : useAddEpic;
-  const { mutateAsync, isLoading: mutateLoading } = useMutateEpic();
+  const { mutateAsync, isLoading: mutateLoading } = useMutateEpic(
+    useEpicsQueryKey()
+  );
 
   const [form] = Form.useForm();
 

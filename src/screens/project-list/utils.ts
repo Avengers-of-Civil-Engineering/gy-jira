@@ -15,6 +15,11 @@ export const useProjectSearchParams = () => {
   ] as const;
 };
 
+export const useProjectsQueryKey = () => {
+  const [params] = useProjectSearchParams();
+  return ["projects", params];
+};
+
 // 处理新建/编辑项目的逻辑
 export const useProjectModal = () => {
   const [{ projectCreate }, setProjectCreate] = useUrlQueryParam([

@@ -6,14 +6,14 @@ import { Link } from "react-router-dom";
 import { Project } from "types/project";
 import { User } from "types/user";
 import { useDeleteProject, useProjectPin } from "utils/project";
-import { useProjectModal } from "./utils";
+import { useProjectModal, useProjectsQueryKey } from "./utils";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
 }
 
 export const List = ({ users, ...props }: ListProps) => {
-  const { mutate } = useProjectPin();
+  const { mutate } = useProjectPin(useProjectsQueryKey());
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
 
   return (
@@ -59,8 +59,8 @@ export const List = ({ users, ...props }: ListProps) => {
           render(value, project) {
             return (
               <span>
-                {project.created
-                  ? dayjs(project.created).format("YYYY-MM-DD")
+                {project.createAt
+                  ? dayjs(project.createAt).format("YYYY-MM-DD")
                   : "无"}
               </span>
             );
@@ -80,7 +80,7 @@ export const List = ({ users, ...props }: ListProps) => {
 const More = ({ project }: { project: Project }) => {
   const { startEdit } = useProjectModal();
 
-  const { mutate: deleteProject } = useDeleteProject();
+  const { mutate: deleteProject } = useDeleteProject(useProjectsQueryKey());
 
   const confirmDeleteProject = (id: number) => {
     Modal.confirm({

@@ -4,12 +4,16 @@ import { TaskTypeSelect } from "components/task-type-select";
 import { UserSelect } from "components/user-select";
 import { useEffect } from "react";
 import { useDeleteTask, useEditTask } from "utils/task";
-import { useTaskModal } from "./utils";
+import { useTaskModal, useTasksQuerykey } from "./utils";
 
 export const TaskModal = () => {
   const { close, editingTaskId, editingTask } = useTaskModal();
-  const { mutateAsync: editTask, isLoading: editLoading } = useEditTask();
-  const { mutateAsync: deletetask, isLoading: deleteLoading } = useDeleteTask();
+  const { mutateAsync: editTask, isLoading: editLoading } = useEditTask(
+    useTasksQuerykey()
+  );
+  const { mutateAsync: deletetask, isLoading: deleteLoading } = useDeleteTask(
+    useTasksQuerykey()
+  );
 
   const [form] = Form.useForm();
 

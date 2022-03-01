@@ -19,6 +19,9 @@ export const useKanbansSearchParams = () => ({
   projectId: useProjectIdInUrl(),
 });
 
+// export const useKanbanQueryKey = () => ["kanbans", useKanbansSearchParams()];
+export const useKanbanQueryKey = () => ["kanbans"];
+
 // tasks 的查询参数
 export const useTasksSearchParams = () => {
   const [param] = useUrlQueryParam(["name", "processorId", "typeId", "tagId"]);
@@ -35,6 +38,9 @@ export const useTasksSearchParams = () => {
     [param, projectId]
   );
 };
+
+// export const useTasksQuerykey = () => ['tasks', useTasksSearchParams()]
+export const useTasksQuerykey = () => ["tasks"];
 
 // 处理 编辑task 的逻辑
 export const useTaskModal = () => {

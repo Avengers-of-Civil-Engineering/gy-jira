@@ -1,5 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { Epic } from "types/epic";
+import { useDeleteConfig, useEditConfig } from "./optimistic-options";
 import { deleter, get, patch, post } from "./request";
 
 // 根据参数 params 获取‘epics 列表’
@@ -30,25 +31,17 @@ export const useAddEpic = () => {
 };
 
 // 删除单个 epic
-export const useDeleteEpic = () => {
-  const queryClient = useQueryClient();
-
+export const useDeleteEpic = (queryKey: QueryKey) => {
   return useMutation(
     ({ id }: { id: number }) => deleter(`/api/v1/epics/${id}`),
-    {
-      onSuccess: () => queryClient.invalidateQueries("epics"),
-    }
+    useDeleteConfig(queryKey)
   );
 };
 
 // 编辑单个 epic
-export const useEditEpic = () => {
-  const queryClient = useQueryClient();
-
+export const useEditEpic = (queryKey: QueryKey) => {
   return useMutation(
     (data: Partial<Epic>) => patch(`/api/v1/epics/${data.id}`, data),
-    {
-      onSuccess: () => queryClient.invalidateQueries("epics"),
-    }
+    useEditConfig(queryKey)
   );
 };
