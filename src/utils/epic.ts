@@ -1,11 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Epic } from "types/epic";
-import { deleter, get, post } from "./request";
+import { deleter, get, patch, post } from "./request";
 
 // 根据参数 params 获取‘epics 列表’
 export const useEpics = (params?: Partial<Epic>) => {
   return useQuery<Epic[], Error>(["epics", params], () =>
     get("/api/v1/epics/", params)
+  );
+};
+
+// 根据 epicId 获取‘单个 epic’
+export const useEpic = (id: number) => {
+  return useQuery<Epic, Error>(
+    ["epics", { id }],
+    () => get(`/api/v1/epics/${id}/`),
+    {
+      enabled: !!id, // id 不为 0 时才发送请求。
+    }
   );
 };
 
@@ -24,6 +35,18 @@ export const useDeleteEpic = () => {
 
   return useMutation(
     ({ id }: { id: number }) => deleter(`/api/v1/epics/${id}`),
+    {
+      onSuccess: () => queryClient.invalidateQueries("epics"),
+    }
+  );
+};
+
+// 编辑单个 epic
+export const useEditEpic = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (data: Partial<Epic>) => patch(`/api/v1/epics/${data.id}`, data),
     {
       onSuccess: () => queryClient.invalidateQueries("epics"),
     }
