@@ -59,11 +59,13 @@
   "devDependencies": {
     "@commitlint/cli": "^16.2.1",
     "@commitlint/config-conventional": "^16.2.1",
+    "@testing-library/react-hooks": "^7.0.2",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@welldone-software/why-did-you-render": "^6.2.3",
     "eslint-config-prettier": "^8.4.0",
     "husky": ">=6",
     "lint-staged": ">=10",
+    "msw": "^0.38.1",
     "prettier": "2.5.1",
     "typescript-styled-plugin": "^0.18.2"
   },
