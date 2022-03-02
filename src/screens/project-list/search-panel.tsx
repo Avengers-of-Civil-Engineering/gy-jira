@@ -23,7 +23,7 @@ export const SearchPanel = ({ param, setParam }: SearchPanelProps) => {
           }
         />
       </Form.Item>
-      <Form.Item>
+      <Form.Item style={{ minWidth: "11rem" }}>
         <UserSelect
           value={param.personId}
           onChange={(value) => setParam({ ...param, personId: value })}

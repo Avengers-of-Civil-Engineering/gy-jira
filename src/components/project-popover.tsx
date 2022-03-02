@@ -38,6 +38,6 @@ export const ProjectPopover = () => {
   );
 };
 
-const ContentContainer = styled.div`
+export const ContentContainer = styled.div`
   min-width: 30rem;
 `;
