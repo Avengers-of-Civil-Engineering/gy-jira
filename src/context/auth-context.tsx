@@ -1,29 +1,16 @@
 import React, { ReactNode, useContext, useEffect } from "react";
-import * as auth from "auth-provider";
+import { getToken, handleUserResponse, removeToken } from "auth-provider";
 import { User } from "types/user";
 import { AuthForm, RegisterForm } from "types/auth";
-import { useAsync } from "utils/use-async";
 import { useQueryClient } from "react-query";
 import { FullPageErrorFallback, FullPageLoading } from "components/lib";
-
-// 初始化用户信息
-const bootstrapUser = async () => {
-  let user = null;
-  const token = auth.getToken();
-  // console.log("token-get", token);
-  if (token) {
-    const data = await auth.getUser(token);
-    // console.log("data-get", data);
-    user = data;
-  }
-  return user;
-};
+import { useAboutMe, useLogin, useRegister } from "utils/auth";
 
 const AuthContext = React.createContext<
   | {
       user: User | null;
       login: (form: AuthForm) => Promise<void>;
-      register: (form: RegisterForm) => Promise<void>;
+      register: (form: RegisterForm) => Promise<User>;
       logout: () => Promise<void>;
     }
   | undefined
@@ -32,31 +19,47 @@ const AuthContext = React.createContext<
 AuthContext.displayName = "AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // const [user, setUser] = useState<User | null>(null);
+  const { mutateAsync: loginRequest } = useLogin();
+  const { mutateAsync: registerRequest } = useRegister();
+
   const {
-    data: user,
-    setData: setUser,
-    run,
+    data: user = null,
+    error,
+    isError,
     isIdle,
     isLoading,
-    isError,
-    error,
-  } = useAsync<User | null>();
+    refetch,
+  } = useAboutMe();
 
+  // 处理登陆逻辑
+  const login = (form: AuthForm) =>
+    loginRequest(form).then((response) => {
+      handleUserResponse(response.data);
+      refetch();
+      return response.data.user;
+    });
+
+  // 处理注册逻辑
+  const register = (form: RegisterForm) =>
+    registerRequest(form).then((response) => response.data);
+
+  // 处理等处逻辑
   const queryClient = useQueryClient();
-
-  const login = (form: AuthForm) => auth.login(form).then(setUser);
-  const register = (form: RegisterForm) => auth.register(form).then(setUser);
   const logout = () =>
-    auth.logout().then(() => {
-      setUser(null);
+    removeToken().then(() => {
+      refetch();
       // 登出时，清除用户信息
       queryClient.clear();
     });
 
   // 刷新时，初始化用户信息
   useEffect(() => {
-    run(bootstrapUser());
+    const token = getToken();
+    if (token) {
+      refetch();
+    } else {
+      return;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
