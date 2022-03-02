@@ -3,18 +3,18 @@ import "./App.css";
 import { UnauthenticatedApp } from "unauthenticated-app";
 import { AuthenticatedApp } from "authenticated-app";
 import { useAuth } from "context/auth-context";
-import { getToken } from "auth-provider";
+import { ErrorBoundary } from "components/error-boundary";
+import { FullPageErrorFallback } from "components/lib";
 
 function App() {
-  const token = getToken();
-  console.log("token", token);
   const { user } = useAuth();
   console.log("user", user);
 
   return (
     <div className="App">
-      {/* {token && user ? <AuthenticatedApp /> : <UnauthenticatedApp />} */}
-      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      <ErrorBoundary fallbackRender={FullPageErrorFallback}>
+        {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      </ErrorBoundary>
     </div>
   );
 }
