@@ -9,7 +9,7 @@ import { useDocumentTitle } from "utils";
 import { useState } from "react";
 import { ErrorBox } from "components/lib";
 
-export const UnauthenticatedApp = () => {
+export default function UnauthenticatedApp() {
   useDocumentTitle("请登陆注册以继续");
 
   const [isRegister, setIsRegister] = useState(false);
@@ -36,7 +36,7 @@ export const UnauthenticatedApp = () => {
       </ShadowCard>
     </Container>
   );
-};
+}
 
 const Container = styled.div`
   display: flex;

@@ -11,7 +11,7 @@ import { resetRoute } from "utils";
 import { ProjectModal } from "screens/project-list/project-modal";
 import { UserPopover } from "components/user-popover";
 
-export const AuthenticatedApp = () => {
+export default function AuthenticatedApp() {
   return (
     <Container>
       <PageHeader />
@@ -26,7 +26,7 @@ export const AuthenticatedApp = () => {
       <ProjectModal />
     </Container>
   );
-};
+}
 
 const PageHeader = () => {
   return (
