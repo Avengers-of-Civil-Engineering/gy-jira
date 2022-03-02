@@ -1,6 +1,7 @@
 import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { Task } from "types/task";
 import { useDebounce } from "utils";
+import { SortProps } from "./kanban";
 import { useDeleteConfig, useEditConfig } from "./optimistic-options";
 import { deleter, get, patch, post } from "./request";
 
@@ -46,5 +47,17 @@ export const useEditTask = (queryKey: QueryKey) => {
   return useMutation(
     (data: Partial<Task>) => patch(`/api/v1/tasks/${data.id}`, data),
     useEditConfig(queryKey)
+  );
+};
+
+// reorder 任务
+export const useReorderTask = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (data: Partial<SortProps>) => post("/api/v1/tasks/reorder/", data),
+    {
+      onSuccess: () => queryClient.invalidateQueries("tasks"),
+    }
   );
 };

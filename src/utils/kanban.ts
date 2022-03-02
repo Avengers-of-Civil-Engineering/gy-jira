@@ -29,3 +29,23 @@ export const useDeleteKanban = (queryKey: QueryKey) => {
     useDeleteConfig(queryKey)
   );
 };
+
+export interface SortProps {
+  fromId: number;
+  referenceId: number;
+  type: "before" | "after";
+  fromKanbanId?: number;
+  toKanbanId?: number;
+}
+
+// reorder 看板
+export const useReorderKanban = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    (data: Partial<SortProps>) => post("/api/v1/kanbans/reorder/", data),
+    {
+      onSuccess: () => queryClient.invalidateQueries("kanbans"),
+    }
+  );
+};
