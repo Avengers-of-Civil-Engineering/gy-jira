@@ -2,7 +2,11 @@ import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { Task } from "types/task";
 import { useDebounce } from "utils";
 import { SortProps } from "./kanban";
-import { useDeleteConfig, useEditConfig } from "./optimistic-options";
+import {
+  useDeleteConfig,
+  useEditConfig,
+  useReorderTaskConfig,
+} from "./optimistic-options";
 import { deleter, get, patch, post } from "./request";
 
 // 根据参数 params 获取‘任务列表’
@@ -26,12 +30,16 @@ export const useTask = (id: number) => {
 };
 
 // 创建单个 task
-export const useAddTask = () => {
+export const useAddTask = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
-  return useMutation((data: Partial<Task>) => post("/api/v1/tasks/", data), {
-    onSuccess: () => queryClient.invalidateQueries("tasks"),
-  });
+  return useMutation(
+    (data: Partial<Task>) => post("/api/v1/tasks/", data),
+    // useAddConfig(queryKey)
+    {
+      onSuccess: () => queryClient.invalidateQueries(queryKey),
+    }
+  );
 };
 
 // 删除单个 task
@@ -51,13 +59,9 @@ export const useEditTask = (queryKey: QueryKey) => {
 };
 
 // reorder 任务
-export const useReorderTask = () => {
-  const queryClient = useQueryClient();
-
+export const useReorderTask = (queryKey: QueryKey) => {
   return useMutation(
     (data: Partial<SortProps>) => post("/api/v1/tasks/reorder/", data),
-    {
-      onSuccess: () => queryClient.invalidateQueries("tasks"),
-    }
+    useReorderTaskConfig(queryKey)
   );
 };

@@ -22,12 +22,16 @@ export const useEpic = (id: number) => {
 };
 
 // 创建单个 epic
-export const useAddEpic = () => {
+export const useAddEpic = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
-  return useMutation((data: Partial<Epic>) => post("/api/v1/epics/", data), {
-    onSuccess: () => queryClient.invalidateQueries("epics"),
-  });
+  return useMutation(
+    (data: Partial<Epic>) => post("/api/v1/epics/", data),
+    // useAddConfig(queryKey)
+    {
+      onSuccess: () => queryClient.invalidateQueries(queryKey),
+    }
+  );
 };
 
 // 删除单个 epic

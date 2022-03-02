@@ -1,6 +1,6 @@
 import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { Kanban } from "types/kanban";
-import { useDeleteConfig } from "./optimistic-options";
+import { useDeleteConfig, useReorderKanbanConfig } from "./optimistic-options";
 import { deleter, get, post } from "./request";
 
 // 根据参数 params 获取‘看板列表’
@@ -11,13 +11,14 @@ export const useKanbans = (params?: Partial<Kanban>) => {
 };
 
 // 创建单个看板
-export const useAddKanban = () => {
+export const useAddKanban = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
   return useMutation(
     (data: Partial<Kanban>) => post("/api/v1/kanbans/", data),
+    // useAddConfig(queryKey)
     {
-      onSuccess: () => queryClient.invalidateQueries("kanbans"),
+      onSuccess: () => queryClient.invalidateQueries(queryKey),
     }
   );
 };
@@ -39,13 +40,9 @@ export interface SortProps {
 }
 
 // reorder 看板
-export const useReorderKanban = () => {
-  const queryClient = useQueryClient();
-
+export const useReorderKanban = (queryKey: QueryKey) => {
   return useMutation(
     (data: Partial<SortProps>) => post("/api/v1/kanbans/reorder/", data),
-    {
-      onSuccess: () => queryClient.invalidateQueries("kanbans"),
-    }
+    useReorderKanbanConfig(queryKey)
   );
 };

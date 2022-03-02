@@ -1,20 +1,22 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
-import { cleanObject } from "utils";
+import { cleanObject, subset } from "utils";
 
 // 获取 url 的查询参数 searchParams
 export const useUrlQueryParam = <K extends string>(keys: K[]) => {
   const [searchParams] = useSearchParams();
   const setSearchParams = useSetUrlSearchParam();
 
+  const [stateKeys] = useState(keys);
+
   return [
     useMemo(
       () =>
-        keys.reduce((prev, key) => {
-          return { ...prev, [key]: searchParams.get(key) || "" };
-        }, {} as { [key in K]: string }),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [searchParams]
+        subset(
+          Object.fromEntries(searchParams) as { [key in K]: string },
+          stateKeys
+        ),
+      [stateKeys, searchParams]
     ),
     (param: Partial<{ [key in K]: unknown }>) => {
       return setSearchParams(param);

@@ -25,13 +25,14 @@ export const useProject = (id: number) => {
 };
 
 // 创建单个项目
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
   return useMutation(
     (data: Partial<Project>) => post("/api/v1/projects/", data),
+    // useAddConfig(queryKey)
     {
-      onSuccess: () => queryClient.invalidateQueries("projects"),
+      onSuccess: () => queryClient.invalidateQueries(queryKey),
     }
   );
 };

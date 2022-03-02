@@ -8,8 +8,10 @@ import { KanbanColumn } from "./kanban-column";
 import { TaskModal } from "./task-modal";
 import { TaskSearchPanel } from "./task-search-panel";
 import {
+  useKanbanQueryKey,
   useKanbansSearchParams,
   useProjectInUrl,
+  useTasksQuerykey,
   useTasksSearchParams,
 } from "./utils";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -21,7 +23,12 @@ export const KanbanScreen = () => {
   useDocumentTitle("看板列表");
 
   const { data: currentProject } = useProjectInUrl();
-  const { data: kanbans, isLoading } = useKanbans();
+  const { data: kanbans, isLoading: kanbanLoading } = useKanbans(
+    useKanbansSearchParams()
+  );
+
+  const { isLoading: taskLoading } = useTasks(useTasksSearchParams());
+  const isLoading = kanbanLoading || taskLoading;
 
   const dragEnd = useDragEnd();
   return (
@@ -66,10 +73,10 @@ export const KanbanScreen = () => {
 
 export const useDragEnd = () => {
   const { data: kanbans } = useKanbans(useKanbansSearchParams());
-  const { mutate: reorderKanban } = useReorderKanban();
+  const { mutate: reorderKanban } = useReorderKanban(useKanbanQueryKey());
 
-  const { data: allTasks = [] } = useTasks(useTasksSearchParams());
-  const { mutate: reorderTask } = useReorderTask();
+  const { data: allTasks } = useTasks(useTasksSearchParams());
+  const { mutate: reorderTask } = useReorderTask(useTasksQuerykey());
 
   return useCallback(
     ({ source, destination, type }: DropResult) => {
@@ -91,10 +98,13 @@ export const useDragEnd = () => {
         const toKanbanId = +destination.droppableId;
         const fromId = allTasks?.filter(
           (task) => task.kanbanId === fromKanbanId
-        )[source.index].id;
+        )[source.index]?.id;
         const referenceId = allTasks?.filter(
           (task) => task.kanbanId === toKanbanId
-        )[destination.index].id;
+        )[destination.index]?.id;
+        if (fromId === referenceId) {
+          return;
+        }
         const type =
           fromKanbanId === toKanbanId && destination.index > source.index
             ? "after"

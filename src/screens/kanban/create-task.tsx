@@ -1,13 +1,13 @@
 import { Card, Input } from "antd";
 import { useEffect, useState } from "react";
 import { useAddTask } from "utils/task";
-import { useProjectIdInUrl } from "./utils";
+import { useProjectIdInUrl, useTasksQuerykey } from "./utils";
 
 export const CreateTask = ({ kanbanId }: { kanbanId: number }) => {
   const [name, setName] = useState("");
   const [inputMode, setInputMode] = useState(false);
 
-  const { mutateAsync: addTask } = useAddTask();
+  const { mutateAsync: addTask } = useAddTask(useTasksQuerykey());
   const projectId = useProjectIdInUrl();
 
   const submit = async () => {

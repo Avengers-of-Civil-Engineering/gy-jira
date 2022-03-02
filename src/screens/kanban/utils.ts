@@ -19,8 +19,7 @@ export const useKanbansSearchParams = () => ({
   projectId: useProjectIdInUrl(),
 });
 
-// export const useKanbanQueryKey = () => ["kanbans", useKanbansSearchParams()];
-export const useKanbanQueryKey = () => ["kanbans"];
+export const useKanbanQueryKey = () => ["kanbans", useKanbansSearchParams()];
 
 // tasks 的查询参数
 export const useTasksSearchParams = () => {
@@ -39,8 +38,7 @@ export const useTasksSearchParams = () => {
   );
 };
 
-// export const useTasksQuerykey = () => ['tasks', useTasksSearchParams()]
-export const useTasksQuerykey = () => ["tasks"];
+export const useTasksQuerykey = () => ["tasks", useTasksSearchParams()];
 
 // 处理 编辑task 的逻辑
 export const useTaskModal = () => {

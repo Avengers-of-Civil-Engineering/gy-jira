@@ -2,12 +2,12 @@ import { Input } from "antd";
 import { useState } from "react";
 import { useAddKanban } from "utils/kanban";
 import { Container } from "./kanban-column";
-import { useProjectIdInUrl } from "./utils";
+import { useKanbanQueryKey, useProjectIdInUrl } from "./utils";
 
 export const CreateKanban = () => {
   const [name, setName] = useState("");
 
-  const { mutateAsync: addKanban } = useAddKanban();
+  const { mutateAsync: addKanban } = useAddKanban(useKanbanQueryKey());
   const projectId = useProjectIdInUrl();
 
   const submit = async () => {
