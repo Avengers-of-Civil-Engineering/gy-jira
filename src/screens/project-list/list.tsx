@@ -2,11 +2,13 @@ import { Dropdown, Menu, Modal, Table, TableProps } from "antd";
 import { ButtonNoPadding } from "components/lib";
 import { Pin } from "components/pin";
 import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Project } from "types/project";
 import { User } from "types/user";
 import { useDeleteProject, useProjectPin } from "utils/project";
-import { useProjectModal, useProjectsQueryKey } from "./utils";
+import { projectListActions } from "./project-list.slice";
+import { useProjectsQueryKey } from "./utils";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
@@ -78,7 +80,7 @@ export const List = ({ users, ...props }: ListProps) => {
 };
 
 const More = ({ project }: { project: Project }) => {
-  const { startEdit } = useProjectModal();
+  const dispatch = useDispatch();
 
   const { mutate: deleteProject } = useDeleteProject(useProjectsQueryKey());
 
@@ -101,7 +103,7 @@ const More = ({ project }: { project: Project }) => {
           <Menu.Item key={"edit"}>
             <ButtonNoPadding
               type={"link"}
-              onClick={() => startEdit(project.id)}
+              onClick={() => dispatch(projectListActions.openProjectModal())}
             >
               编辑
             </ButtonNoPadding>

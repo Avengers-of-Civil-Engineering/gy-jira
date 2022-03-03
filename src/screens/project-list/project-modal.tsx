@@ -1,42 +1,46 @@
 import styled from "@emotion/styled";
-import { Button, Drawer, Input, Spin } from "antd";
+import { Button, Drawer, Input } from "antd";
 import { Form } from "antd";
 import { UserSelect } from "components/user-select";
 import { useEffect } from "react";
-import { useAddProject, useEditProject } from "utils/project";
-import { useProjectModal, useProjectsQueryKey } from "./utils";
+import { useDispatch, useSelector } from "react-redux";
+import { useAddProject } from "utils/project";
+import {
+  projectListActions,
+  selectProjectModalOpen,
+} from "./project-list.slice";
+import { useProjectsQueryKey } from "./utils";
 
 export const ProjectModal = () => {
-  const { projectModalOpen, close, editingProject, isLoading } =
-    useProjectModal();
+  const dispatch = useDispatch();
 
-  const useMutateProject = editingProject ? useEditProject : useAddProject;
+  const projectModalOpen = useSelector(selectProjectModalOpen);
 
-  const { mutateAsync, isLoading: mutateLoading } = useMutateProject(
+  const { mutateAsync, isLoading: mutateLoading } = useAddProject(
     useProjectsQueryKey()
   );
 
-  const title = editingProject ? "编辑项目" : "创建项目";
+  const title = "创建项目";
 
   const [form] = Form.useForm();
 
   const onFinish = async (values: any) => {
-    mutateAsync({ ...editingProject, ...values }).then(() => {
+    mutateAsync(values).then(() => {
       // resetFields: 重置一组字段到 initialValues
       form.resetFields();
-      close();
+      dispatch(projectListActions.closeProjectModal());
     });
   };
 
   const closeModal = () => {
     form.resetFields();
-    close();
+    dispatch(projectListActions.closeProjectModal());
   };
 
   // 进入页面时，初始化表单内容
   useEffect(() => {
-    form.setFieldsValue(editingProject);
-  }, [editingProject, form]);
+    form.resetFields();
+  }, [form]);
 
   return (
     <Drawer
@@ -46,50 +50,44 @@ export const ProjectModal = () => {
       width={"100%"}
     >
       <Container>
-        {isLoading ? (
-          <Spin size={"large"} />
-        ) : (
-          <>
-            <h1>{title}</h1>
-            <Form
-              form={form}
-              layout={"vertical"}
-              style={{ width: "40rem" }}
-              onFinish={onFinish}
+        <h1>{title}</h1>
+        <Form
+          form={form}
+          layout={"vertical"}
+          style={{ width: "40rem" }}
+          onFinish={onFinish}
+        >
+          <Form.Item
+            label={"名称"}
+            name={"name"}
+            rules={[{ required: true, message: "请输入项目名称" }]}
+          >
+            <Input type={"text"} placeholder={"请输入项目名称"} />
+          </Form.Item>
+          <Form.Item
+            label={"部门"}
+            name={"organization"}
+            rules={[{ required: true, message: "请输入部门名" }]}
+          >
+            <Input type={"text"} placeholder={"请输入部门名"} />
+          </Form.Item>
+          <Form.Item
+            label={"负责人"}
+            name={"personId"}
+            rules={[{ required: true, message: "请选择负责人" }]}
+          >
+            <UserSelect defaultOptionName={"负责人"} />
+          </Form.Item>
+          <Form.Item style={{ textAlign: "right" }}>
+            <Button
+              loading={mutateLoading}
+              type={"primary"}
+              htmlType={"submit"}
             >
-              <Form.Item
-                label={"名称"}
-                name={"name"}
-                rules={[{ required: true, message: "请输入项目名称" }]}
-              >
-                <Input type={"text"} placeholder={"请输入项目名称"} />
-              </Form.Item>
-              <Form.Item
-                label={"部门"}
-                name={"organization"}
-                rules={[{ required: true, message: "请输入部门名" }]}
-              >
-                <Input type={"text"} placeholder={"请输入部门名"} />
-              </Form.Item>
-              <Form.Item
-                label={"负责人"}
-                name={"personId"}
-                rules={[{ required: true, message: "请选择负责人" }]}
-              >
-                <UserSelect defaultOptionName={"负责人"} />
-              </Form.Item>
-              <Form.Item style={{ textAlign: "right" }}>
-                <Button
-                  loading={mutateLoading}
-                  type={"primary"}
-                  htmlType={"submit"}
-                >
-                  提交
-                </Button>
-              </Form.Item>
-            </Form>
-          </>
-        )}
+              提交
+            </Button>
+          </Form.Item>
+        </Form>
       </Container>
     </Drawer>
   );
