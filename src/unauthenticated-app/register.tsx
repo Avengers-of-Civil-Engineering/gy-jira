@@ -64,13 +64,13 @@ export const Register = ({
           name={"password"}
           rules={[{ required: true, message: "请输入密码" }]}
         >
-          <Input type="text" id={"password"} placeholder={"密码"} />
+          <Input type="password" id={"password"} placeholder={"密码"} />
         </Form.Item>
         <Form.Item
           name={"cpassword"}
           rules={[{ required: true, message: "请确认密码" }]}
         >
-          <Input type="text" id={"cpassword"} placeholder={"确认密码"} />
+          <Input type="password" id={"cpassword"} placeholder={"确认密码"} />
         </Form.Item>
         <Form.Item>
           <Button type={"primary"} htmlType={"submit"}>
