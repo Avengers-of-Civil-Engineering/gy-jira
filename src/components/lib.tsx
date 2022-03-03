@@ -42,21 +42,17 @@ const FullPage = styled.div`
   align-items: center;
 `;
 
-export const FullPageLoading = () => {
-  return (
-    <FullPage>
-      <Spin size={"large"} />
-    </FullPage>
-  );
-};
+export const FullPageLoading = () => (
+  <FullPage>
+    <Spin size={"large"} />
+  </FullPage>
+);
 
-export const FullPageErrorFallback = ({ error }: { error: Error | null }) => {
-  return (
-    <FullPage>
-      <ErrorBox error={error} />
-    </FullPage>
-  );
-};
+export const FullPageErrorFallback = ({ error }: { error: Error | null }) => (
+  <FullPage>
+    <ErrorBox error={error} />
+  </FullPage>
+);
 
 // 类型守卫
 const isError = (value: any): value is Error => value?.message;

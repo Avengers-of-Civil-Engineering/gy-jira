@@ -1,10 +1,12 @@
-import { Modal, Form, Input, Button } from "antd";
-import { EpicSelect } from "components/epic-select";
+import { Modal, Form, Input, Button, Typography } from "antd";
+import { IdSelect } from "components/id-select";
 import { TaskTypeSelect } from "components/task-type-select";
 import { UserSelect } from "components/user-select";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useEpics } from "utils/epic";
 import { useDeleteTask, useEditTask } from "utils/task";
-import { useTaskModal, useTasksQuerykey } from "./utils";
+import { useProjectIdInUrl, useTaskModal, useTasksQuerykey } from "./utils";
 
 export const TaskModal = () => {
   const { close, editingTaskId, editingTask } = useTaskModal();
@@ -83,6 +85,24 @@ export const TaskModal = () => {
       </div>
     </Modal>
   );
+};
+
+const EpicSelect = (props: React.ComponentProps<typeof IdSelect>) => {
+  const projectId = useProjectIdInUrl();
+  const { data: allEpics } = useEpics();
+  const epics = allEpics
+    ?.filter((epic) => epic.projectId === projectId)
+    .map((epic) => ({ username: epic.name, id: epic.id }));
+
+  if (epics?.length === 0) {
+    return (
+      <div>
+        <Typography.Text type={"danger"}>该项目还没有任务组 </Typography.Text>
+        <Link to={`/projects/${projectId}/epic`}>去创建</Link>
+      </div>
+    );
+  }
+  return <IdSelect options={epics || []} {...props} />;
 };
 
 const layout = {

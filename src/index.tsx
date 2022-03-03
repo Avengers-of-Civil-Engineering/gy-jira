@@ -5,12 +5,15 @@ import "antd/dist/antd.less";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AppProviders } from "context";
+import { Profiler } from "components/profiler";
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppProviders>
-      <App />
-    </AppProviders>
+    <Profiler id={"Root App"} phases={["mount"]}>
+      <AppProviders>
+        <App />
+      </AppProviders>
+    </Profiler>
   </React.StrictMode>,
   document.getElementById("root")
 );
