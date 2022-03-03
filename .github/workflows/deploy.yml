@@ -29,5 +29,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           ARGS: '-avz'
-          SOURCE: "dist/"
+          SOURCE: "build/"
           TARGET: '/app/gy-jira/'
