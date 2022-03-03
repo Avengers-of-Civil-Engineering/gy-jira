@@ -103,7 +103,10 @@ const More = ({ project }: { project: Project }) => {
           <Menu.Item key={"edit"}>
             <ButtonNoPadding
               type={"link"}
-              onClick={() => dispatch(projectListActions.openProjectModal())}
+              onClick={() => {
+                console.log("toEdit-id", project.id);
+                dispatch(projectListActions.editProjectModal(project.id));
+              }}
             >
               编辑
             </ButtonNoPadding>

@@ -1,31 +1,38 @@
 import styled from "@emotion/styled";
-import { Button, Drawer, Input } from "antd";
+import { Button, Drawer, Input, Spin } from "antd";
 import { Form } from "antd";
 import { UserSelect } from "components/user-select";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAddProject } from "utils/project";
+import { useAddProject, useEditProject, useProject } from "utils/project";
 import {
   projectListActions,
+  selectProjectModalEditId,
   selectProjectModalOpen,
 } from "./project-list.slice";
 import { useProjectsQueryKey } from "./utils";
 
 export const ProjectModal = () => {
   const dispatch = useDispatch();
-
   const projectModalOpen = useSelector(selectProjectModalOpen);
+  const editingProjectId = useSelector(selectProjectModalEditId);
+  console.log("store-editingProjectId", editingProjectId);
 
-  const { mutateAsync, isLoading: mutateLoading } = useAddProject(
+  const { data: editingProject, isLoading } = useProject(editingProjectId);
+  console.log("get-editingProject", editingProject);
+
+  const useMutatePeoject = editingProject ? useEditProject : useAddProject;
+
+  const { mutateAsync, isLoading: mutateLoading } = useMutatePeoject(
     useProjectsQueryKey()
   );
 
-  const title = "创建项目";
+  const title = editingProject ? "编辑项目" : "创建项目";
 
   const [form] = Form.useForm();
 
   const onFinish = async (values: any) => {
-    mutateAsync(values).then(() => {
+    mutateAsync({ ...editingProject, ...values }).then(() => {
       // resetFields: 重置一组字段到 initialValues
       form.resetFields();
       dispatch(projectListActions.closeProjectModal());
@@ -39,8 +46,9 @@ export const ProjectModal = () => {
 
   // 进入页面时，初始化表单内容
   useEffect(() => {
-    form.resetFields();
-  }, [form]);
+    console.log("look!");
+    form.setFieldsValue(editingProject);
+  }, [editingProject, form]);
 
   return (
     <Drawer
@@ -50,44 +58,50 @@ export const ProjectModal = () => {
       width={"100%"}
     >
       <Container>
-        <h1>{title}</h1>
-        <Form
-          form={form}
-          layout={"vertical"}
-          style={{ width: "40rem" }}
-          onFinish={onFinish}
-        >
-          <Form.Item
-            label={"名称"}
-            name={"name"}
-            rules={[{ required: true, message: "请输入项目名称" }]}
-          >
-            <Input type={"text"} placeholder={"请输入项目名称"} />
-          </Form.Item>
-          <Form.Item
-            label={"部门"}
-            name={"organization"}
-            rules={[{ required: true, message: "请输入部门名" }]}
-          >
-            <Input type={"text"} placeholder={"请输入部门名"} />
-          </Form.Item>
-          <Form.Item
-            label={"负责人"}
-            name={"personId"}
-            rules={[{ required: true, message: "请选择负责人" }]}
-          >
-            <UserSelect defaultOptionName={"负责人"} />
-          </Form.Item>
-          <Form.Item style={{ textAlign: "right" }}>
-            <Button
-              loading={mutateLoading}
-              type={"primary"}
-              htmlType={"submit"}
+        {isLoading ? (
+          <Spin size={"large"} />
+        ) : (
+          <>
+            <h1>{title}</h1>
+            <Form
+              form={form}
+              layout={"vertical"}
+              style={{ width: "40rem" }}
+              onFinish={onFinish}
             >
-              提交
-            </Button>
-          </Form.Item>
-        </Form>
+              <Form.Item
+                label={"名称"}
+                name={"name"}
+                rules={[{ required: true, message: "请输入项目名称" }]}
+              >
+                <Input type={"text"} placeholder={"请输入项目名称"} />
+              </Form.Item>
+              <Form.Item
+                label={"部门"}
+                name={"organization"}
+                rules={[{ required: true, message: "请输入部门名" }]}
+              >
+                <Input type={"text"} placeholder={"请输入部门名"} />
+              </Form.Item>
+              <Form.Item
+                label={"负责人"}
+                name={"personId"}
+                rules={[{ required: true, message: "请选择负责人" }]}
+              >
+                <UserSelect defaultOptionName={"负责人"} />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "right" }}>
+                <Button
+                  loading={mutateLoading}
+                  type={"primary"}
+                  htmlType={"submit"}
+                >
+                  提交
+                </Button>
+              </Form.Item>
+            </Form>
+          </>
+        )}
       </Container>
     </Drawer>
   );
