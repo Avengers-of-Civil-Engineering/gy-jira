@@ -98,7 +98,7 @@ const EpicSelect = (props: React.ComponentProps<typeof IdSelect>) => {
     return (
       <div>
         <Typography.Text type={"danger"}>该项目还没有任务组 </Typography.Text>
-        <Link to={`/projects/${projectId}/epic`}>去创建</Link>
+        <Link to={`/projects/${projectId}/epic?createEpic=true`}>去创建</Link>
       </div>
     );
   }

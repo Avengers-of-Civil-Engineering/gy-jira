@@ -23,13 +23,13 @@ import { Profiler } from "components/profiler";
 export const KanbanScreen = () => {
   useDocumentTitle("看板列表");
 
-  const { data: currentProject } = useProjectInUrl();
+  const { data: currentProject, isLoading: projectLoading } = useProjectInUrl();
   const { data: kanbans, isLoading: kanbanLoading } = useKanbans(
     useKanbansSearchParams()
   );
 
   const { isLoading: taskLoading } = useTasks(useTasksSearchParams());
-  const isLoading = kanbanLoading || taskLoading;
+  const isLoading = projectLoading || kanbanLoading || taskLoading;
 
   const dragEnd = useDragEnd();
   return (
@@ -41,33 +41,35 @@ export const KanbanScreen = () => {
         }
       >
         <ScreenContainer>
-          <h1>{`${currentProject?.name}看板`}</h1>
-          <TaskSearchPanel />
           {isLoading ? (
             <Spin size={"large"} />
           ) : (
-            <ColumnsContainer>
-              <Drop
-                droppableId={"kanban"}
-                type={"COLUMN"}
-                direction={"horizontal"}
-              >
-                <DropChild style={{ display: "flex" }}>
-                  {kanbans?.map((kanban, index) => (
-                    <Drag
-                      draggableId={"kanban" + kanban.id}
-                      index={index}
-                      key={kanban.id}
-                    >
-                      <KanbanColumn kanban={kanban} key={kanban.id} />
-                    </Drag>
-                  ))}
-                </DropChild>
-              </Drop>
-              <CreateKanban />
-            </ColumnsContainer>
+            <>
+              <h1>{`${currentProject?.name}看板`}</h1>
+              <TaskSearchPanel />
+              <ColumnsContainer>
+                <Drop
+                  droppableId={"kanban"}
+                  type={"COLUMN"}
+                  direction={"horizontal"}
+                >
+                  <DropChild style={{ display: "flex" }}>
+                    {kanbans?.map((kanban, index) => (
+                      <Drag
+                        draggableId={"kanban" + kanban.id}
+                        index={index}
+                        key={kanban.id}
+                      >
+                        <KanbanColumn kanban={kanban} key={kanban.id} />
+                      </Drag>
+                    ))}
+                  </DropChild>
+                </Drop>
+                <CreateKanban />
+              </ColumnsContainer>
+              <TaskModal />
+            </>
           )}
-          <TaskModal />
         </ScreenContainer>
       </DragDropContext>
     </Profiler>
