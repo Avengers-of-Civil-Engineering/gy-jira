@@ -20,6 +20,7 @@ export const List = ({ users, ...props }: ListProps) => {
     <Table
       rowKey={"id"}
       pagination={false}
+      scroll={{ y: "60vh" }}
       columns={[
         {
           // 项目收藏状态

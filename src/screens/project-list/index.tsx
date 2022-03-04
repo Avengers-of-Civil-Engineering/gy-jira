@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import { Row, ScreenContainer } from "components/lib";
+import { ErrorBox, Row, ScreenContainer } from "components/lib";
 import { Profiler } from "components/profiler";
 import { useDocumentTitle } from "utils";
 import { useProjects } from "utils/project";
@@ -15,7 +15,7 @@ export const ProjectListScreen = () => {
 
   const [param, setParam] = useProjectSearchParams();
 
-  const { data: list, isLoading } = useProjects(param);
+  const { data: list, isLoading, error } = useProjects(param);
   const { data: users } = useUsers();
 
   return (
@@ -28,6 +28,7 @@ export const ProjectListScreen = () => {
           </Button>
         </Row>
         <SearchPanel param={param} setParam={setParam} />
+        {error ? <ErrorBox error={error} /> : null}
         <List loading={isLoading} users={users || []} dataSource={list || []} />
       </ScreenContainer>
     </Profiler>
